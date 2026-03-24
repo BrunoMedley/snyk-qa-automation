@@ -1,0 +1,1 @@
+# snyk-qa-automation
