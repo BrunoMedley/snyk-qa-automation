@@ -4,7 +4,7 @@ import { UserListPage } from '../../pages/UserListPage';
 import { SideBar } from '../../components/SideBar';
 import { NavBar } from '../../components/NavBar';
 
-test.describe('User List and Search', () => {
+test.describe('User List and Search @users', () => {
   let userListPage: UserListPage;
   let sideBar: SideBar;
   let navBar: NavBar;
@@ -24,7 +24,7 @@ test.describe('User List and Search', () => {
     await userListPage.verifyUserListLoaded();
   });
 
-  test('user list page loads and displays sample user details', async () => {
+  test('user list page loads and displays sample user details @smoke @users', async () => {
     // 1. Table should be visible
     await expect(userListPage.usersTable).toBeVisible();
 
@@ -53,7 +53,7 @@ test.describe('User List and Search', () => {
     });
   });
 
-  test('search by full name shows matching user(s)', async () => {
+  test('search by full name shows matching user(s) @users @search', async () => {
     // 1. Get real data from the first row  
     const sampleUser = await userListPage.getFirstUserDetails();
 
@@ -71,7 +71,7 @@ test.describe('User List and Search', () => {
 
   });
 
-  test('search by partial name shows users containing partial input', async () => {
+  test('search by partial name shows users containing partial input @users @search', async () => {
     // 1. Get real data from the first row
     const sampleUser = await userListPage.getFirstUserDetails();
 
@@ -88,7 +88,7 @@ test.describe('User List and Search', () => {
     await userListPage.expectAllRowsContain(partialName);
   });
 
-  test('search with non-existent name shows no results state', async () => {
+  test('search with non-existent name shows no results state @users @search @negative', async () => {
     // 1. Generate a random name
     const randomName = `no-user-${Date.now()}`; 
 
