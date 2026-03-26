@@ -22,7 +22,7 @@ Playwright offers many powerful features out of the box, including:
 
 ## Test Levels and Approach
 
-- **Primary layer: E2E UI automation**
+- **Primary layer: Page Objects**
   - Use Playwright + TypeScript for realistic user workflows against the configured environment (`BASE_URL`).
   - Follow the Page Object Model (`pages/`, `components/`) to improve maintainability and reduce selector duplication.
   - `pages/` contain only locators and actions from that page
@@ -40,6 +40,7 @@ Playwright offers many powerful features out of the box, including:
 - Manage test credentials through environment variables (`USER_EMAIL`, `USER_PASSWORD`).
 - Keep test data deterministic to minimize flaky outcomes.
 - independent test cases that do not depend on execution order.
+- authentication reuse for this suite via: storageState
 
 ## Cross-Browser Strategy
 
@@ -79,10 +80,9 @@ Playwright offers many powerful features out of the box, including:
 
 
 
+# BONUS Challenge: Critical QA Eye
 
-#BONUS Challenge: Critical QA Eye
-
- - Have unique stable locators specific for test automation like a data-testid = '' would increase greatly the ease and speed of automation but also reduce flakyness
- - feedback messages being standarized across the aplication this would also help with speed of automation and flakyness
- - Pagination on the user list
- - APIs
+- Having unique, stable locators specific for test automation (e.g. data-testid="") would greatly increase the ease and speed of automation, while also reducing flakiness.
+- Standardizing feedback messages across the application would also help with automation and flakiness.
+- Pagination on the user list.
+- APIs.
