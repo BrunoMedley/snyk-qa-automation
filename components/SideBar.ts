@@ -1,6 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 
-export class LoginPage {
+export class SideBar {
   readonly page: Page;
   readonly sidebarBrand: Locator;
   readonly navAdmin: Locator;
@@ -8,16 +8,14 @@ export class LoginPage {
   readonly navSendMessage: Locator;
   readonly sidebarToggle: Locator;
 
-
   constructor(page: Page) {
-
- // ==================== Static Locators ==================== 
+    // ==================== Static Locators ====================
     this.page = page;
-    this.sidebarBrand = page.getByRole('link', { name: 'COVA-dev' })
-    this.navAdmin = page.getByRole('link', { name: 'Admin' })
-    this.navListUsers = page.getByRole('link', { name: 'List Users' }),
-    this.navSendMessage = page.getByRole('link', { name: 'Send Message' }),
-    this.sidebarToggle = page.locator('#sidebarToggle')
+    this.sidebarBrand = page.getByRole('link', { name: 'COVA-dev' });
+    this.navAdmin = page.getByRole('link', { name: 'Admin' });
+    this.navListUsers = page.getByRole('link', { name: 'List Users' });
+    this.navSendMessage = page.getByRole('link', { name: 'Send Message' });
+    this.sidebarToggle = page.locator('#sidebarToggle');
   }
 
   async verifySideBar(): Promise<void> {
@@ -48,3 +46,5 @@ export class LoginPage {
     await expect(this.page.url()).toContain('/');
   }
 }
+
+export default SideBar;
