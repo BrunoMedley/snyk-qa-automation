@@ -1,6 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 
-export class LoginPage {
+export class NavBar {
   readonly page: Page;
   readonly searchUserInput: Locator;
   readonly searchUserBtn: Locator;
@@ -10,10 +10,8 @@ export class LoginPage {
   readonly logoutCancelBtn: Locator;
   readonly logoutConfirmBtn: Locator;
 
-
   constructor(page: Page) {
-
- // ==================== Static Locators ==================== 
+    // ==================== Static Locators ====================
     this.page = page;
     this.searchUserInput = page.locator('form.navbar-search').first().locator('input[name="search"]');
     this.searchUserBtn = page.locator('form.navbar-search').first().locator('button[type="submit"]');
@@ -28,9 +26,28 @@ export class LoginPage {
     await expect(this.searchUserInput).toBeVisible();
     await expect(this.searchUserBtn).toBeVisible();
     await expect(this.userDropdown).toBeVisible();
-    await expect(this.userProfile).toBeVisible();
-    await expect(this.logoutLink).toBeVisible();
-    await expect(this.logoutCancelBtn).toBeVisible();
+  }
+
+  async logout(): Promise<void> {
+    await this.userDropdown.click();
+    await this.logoutLink.click();
     await expect(this.logoutConfirmBtn).toBeVisible();
+    await this.logoutConfirmBtn.click();
+    await expect(this.page.url()).toContain('/');
+  }
+
+  async searchUser(term: string): Promise<void> {
+    await this.searchUserInput.clear();
+    await this.searchUserInput.fill(term);
+    await this.searchUserBtn.click();
+    await this.page.waitForLoadState('networkidle');
+    await expect(this.page.url()).toContain('/list_users.php?search=');
+  }
+
+  async searchAllUsers(): Promise<void> {
+    await this.searchUserBtn.click();
+    await expect(this.page.url()).toContain('/list_users.php?search=');
   }
 }
+
+export default NavBar;

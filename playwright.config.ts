@@ -45,6 +45,7 @@ if (!isWebkitUnsupported) {
 }
 
 export default defineConfig({
+  globalSetup: './global.setup',
   testDir: './tests',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
