@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pages/LoginPage';
+import { LoginPage as SideBar } from '../../components/SideBar';
 
 // Credentials from env (see playwright / .env setup)
 const VALID_EMAIL = process.env.USER_EMAIL!;
@@ -7,9 +8,11 @@ const VALID_PASSWORD = process.env.USER_PASSWORD!;
 
 test.describe('Login Authentication @auth', () => {
   let loginPage: LoginPage;
+  let sideBar: SideBar;
 
   test.beforeEach(async ({ page }) => {
     loginPage = new LoginPage(page);
+    sideBar = new SideBar(page);
     await loginPage.goto(); // fresh login page each test
   });
 
@@ -18,7 +21,7 @@ test.describe('Login Authentication @auth', () => {
   test('successful login redirects to user list @smoke @auth', async ({ page }) => {
     await loginPage.login(VALID_EMAIL, VALID_PASSWORD);
     await expect(page).toHaveURL(/admin.php/);
-    //ADD MORE VERIFICATIONS HERE
+    await sideBar.verifySideBar();
   });
 
   // Wrong password → app-specific error
