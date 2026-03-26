@@ -1,4 +1,5 @@
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
@@ -32,18 +33,29 @@ if (!baseURL) {
   );
 }
 
+const browserProjects = [
+  { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+  { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+];
+
+// WebKit is unavailable on some macOS ARM versions.
+const isWebkitUnsupported = process.platform === 'darwin' && process.arch === 'arm64' && os.release().startsWith('22.');
+if (!isWebkitUnsupported) {
+  browserProjects.push({ name: 'webkit', use: { ...devices['Desktop Safari'] } });
+}
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: [['html', { open: 'never' }], ['list']],
+  workers: process.env.CI ? 4 : '100%',
+  reporter: [['html', { open: 'never', outputFolder: 'playwright-report' }], ['list']],
   use: {
     baseURL,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: browserProjects,
 });
