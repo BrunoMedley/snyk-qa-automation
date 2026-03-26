@@ -1,25 +1,26 @@
+import path from 'path';
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../../pages/LoginPage';
 import { UserListPage } from '../../pages/UserListPage';
 import { SideBar } from '../../components/SideBar';
 import { NavBar } from '../../components/NavBar';
 
 test.describe('User List and Search @users', () => {
+  // Use the auth state generated once by `global.setup.ts`.
+  const AUTH_STATE = path.resolve('playwright/.auth/user.json');
+  test.use({ storageState: AUTH_STATE });
+
   let userListPage: UserListPage;
   let sideBar: SideBar;
   let navBar: NavBar;
 
-  const VALID_EMAIL = process.env.USER_EMAIL!;
-  const VALID_PASSWORD = process.env.USER_PASSWORD!;
-
   test.beforeEach(async ({ page }) => {
-    const loginPage = new LoginPage(page);
     sideBar = new SideBar(page);
     navBar = new NavBar(page);
     userListPage = new UserListPage(page);
 
-    await loginPage.goto();
-    await loginPage.login(VALID_EMAIL, VALID_PASSWORD);
+    // `storageState` authenticates the session, but the sidebar only appears
+    // on the admin page. Go there first, then navigate to the list page.
+    await page.goto('/admin.php');
     await sideBar.navigateToListUsers();
     await userListPage.verifyUserListLoaded();
   });
@@ -88,7 +89,7 @@ test.describe('User List and Search @users', () => {
     await userListPage.expectAllRowsContain(partialName);
   });
 
-  test('search with non-existent name shows no results state @users @search @negative', async () => {
+  test('search with non-existent name shows no results state @users @search ', async () => {
     // 1. Generate a random name
     const randomName = `no-user-${Date.now()}`; 
 
